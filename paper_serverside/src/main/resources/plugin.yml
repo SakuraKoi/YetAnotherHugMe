@@ -1,0 +1,4 @@
+name: YetAnotherHugMe
+version: 'v1'
+main: dev.sakurakooi.yetanotherhugme.YetAnotherHugMe
+api-version: '1.21'
