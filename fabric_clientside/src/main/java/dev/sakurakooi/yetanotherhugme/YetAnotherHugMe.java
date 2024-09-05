@@ -6,10 +6,10 @@ import dev.sakurakooi.yetanotherhugme.packet.C2SHugMeHandshakeAckPacket;
 import dev.sakurakooi.yetanotherhugme.packet.S2CHugMeAnimationRenderPacket;
 import dev.sakurakooi.yetanotherhugme.packet.S2CHugMeHandshakeReqPacket;
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,5 +38,16 @@ public class YetAnotherHugMe implements ModInitializer {
 	// called from client disconnect event / server handshake packet(handle bungeecord switch server)
 	public void doCleanup() {
 		// TODO cleanup data
+	}
+
+	public void startHugAnimation(PlayerEntity player1, PlayerEntity player2, String animationEnumName) {
+		// TODO unimplemented
+		// RenderPlayerEventHandler.lockPlayers(sender, receiver);
+		// startHugAnimation(sender, receiver, hugRenderPayload.animationEnum());
+	}
+
+	public void endHugAnimation(PlayerEntity player1, PlayerEntity player2) {
+		// TODO unimplemented
+		// RenderPlayerEventHandler.unlockPlayers(sender, receiver);
 	}
 }
