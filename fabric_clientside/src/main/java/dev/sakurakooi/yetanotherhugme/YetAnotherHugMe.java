@@ -1,23 +1,31 @@
 package dev.sakurakooi.yetanotherhugme;
 
+import dev.sakurakooi.yetanotherhugme.animation.HugAnimationEnum;
 import dev.sakurakooi.yetanotherhugme.network.HugMeHandshakeHandler;
 import dev.sakurakooi.yetanotherhugme.network.HugMeRenderHandler;
 import dev.sakurakooi.yetanotherhugme.packet.C2SHugMeHandshakeAckPacket;
 import dev.sakurakooi.yetanotherhugme.packet.S2CHugMeAnimationRenderPacket;
 import dev.sakurakooi.yetanotherhugme.packet.S2CHugMeHandshakeReqPacket;
+import lombok.Getter;
+import lombok.Setter;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import dev.sakurakooi.yetanotherhugme.animation.AnimationManager;
 
 public class YetAnotherHugMe implements ModInitializer {
 	public static final String MOD_ID = "yetanotherhugme";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static YetAnotherHugMe INSTANCE;
+
+	@Getter @Setter
+	private boolean renderingPlayer;
 
 	@Override
 	public void onInitialize() {
@@ -40,14 +48,26 @@ public class YetAnotherHugMe implements ModInitializer {
 		// TODO cleanup data
 	}
 
-	public void startHugAnimation(PlayerEntity player1, PlayerEntity player2, String animationEnumName) {
+	public void startHugAnimation(@Nullable PlayerEntity player1, @Nullable PlayerEntity player2, String animationEnumName) {
+		if (player1 == null || player2 == null) {
+			LOGGER.warn("startHugAnimation: player1 or player2 is null");
+			return;
+		}
+		HugAnimationEnum animation;
+		try {
+			animation = HugAnimationEnum.valueOf(animationEnumName);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("startHugAnimation: invalid animationEnumName: {}", animationEnumName);
+			return;
+		}
 		// TODO unimplemented
 		// RenderPlayerEventHandler.lockPlayers(sender, receiver);
-		// startHugAnimation(sender, receiver, hugRenderPayload.animationEnum());
+		AnimationManager.playHugAnimation(player1, player2, animation);
 	}
 
-	public void endHugAnimation(PlayerEntity player1, PlayerEntity player2) {
+	public void endHugAnimation(@Nullable PlayerEntity player1, @Nullable PlayerEntity player2) {
 		// TODO unimplemented
 		// RenderPlayerEventHandler.unlockPlayers(sender, receiver);
+		AnimationManager.endHugAnimation(player1, player2);
 	}
 }

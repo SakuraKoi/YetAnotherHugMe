@@ -15,7 +15,6 @@ public class HugMeRenderHandler implements ClientPlayNetworking.PlayPayloadHandl
             if (client.world == null) return;
             var player1 = client.world.getPlayerByUuid(payload.player1());
             var player2 = client.world.getPlayerByUuid(payload.player2());
-            if (player1 == null || player2 == null) return;
             if (payload.endFlag()) {
                 YetAnotherHugMe.INSTANCE.endHugAnimation(player1, player2);
             } else {

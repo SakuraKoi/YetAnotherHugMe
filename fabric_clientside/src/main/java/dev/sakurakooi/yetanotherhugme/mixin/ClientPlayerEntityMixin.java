@@ -3,6 +3,7 @@ package dev.sakurakooi.yetanotherhugme.mixin;
 import com.mojang.authlib.GameProfile;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
+import dev.kosmx.playerAnim.api.layered.modifier.SpeedModifier;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.sakurakooi.yetanotherhugme.IHugMeAnimatedPlayer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -21,6 +22,7 @@ public class ClientPlayerEntityMixin implements IHugMeAnimatedPlayer {
 
 	@Inject(method = "<init>", at = @At(value = "RETURN"))
 	private void init(ClientWorld world, GameProfile profile, PlayerPublicKey publicKey, CallbackInfo ci) {
+		modAnimationContainer.addModifierBefore(new SpeedModifier(0.5F));
 		PlayerAnimationAccess.getPlayerAnimLayer((AbstractClientPlayerEntity) (Object)this).addAnimLayer(1000, modAnimationContainer);
 	}
 
