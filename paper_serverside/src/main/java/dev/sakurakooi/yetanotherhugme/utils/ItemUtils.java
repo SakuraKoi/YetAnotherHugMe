@@ -11,7 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 
-public class ItemBuilder {
+public class ItemUtils {
     private static NamespacedKey namespacedKey = new NamespacedKey("yetanotherhugme", "hug_ticket");
     public static ItemStack createTicket() {
         ItemStack itemStack = new ItemStack(Material.PAPER, 1);

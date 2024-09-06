@@ -1,8 +1,9 @@
 package dev.sakurakooi.yetanotherhugme;
 
 import dev.sakurakooi.yetanotherhugme.listeners.HandshakeListener;
+import dev.sakurakooi.yetanotherhugme.listeners.HugActionListener;
 import dev.sakurakooi.yetanotherhugme.network.HugMeHandshakeHandler;
-import dev.sakurakooi.yetanotherhugme.utils.ItemBuilder;
+import dev.sakurakooi.yetanotherhugme.utils.ItemUtils;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -29,14 +30,15 @@ public final class YetAnotherHugMe extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
-        Bukkit.getPluginManager().registerEvents(new HandshakeListener(), this);
         Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(new HandshakeListener(), this);
+        Bukkit.getPluginManager().registerEvents(new HugActionListener(), this);
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "yetanotherhugme:handshake", new HugMeHandshakeHandler());
         registerRecipe();
     }
 
     private void registerRecipe() {
-        ShapedRecipe recipe = new ShapedRecipe(RECIPE_KEY, ItemBuilder.createTicket());
+        ShapedRecipe recipe = new ShapedRecipe(RECIPE_KEY, ItemUtils.createTicket());
         recipe.shape("BBB", "WWW", "PPP");
         recipe.setIngredient('B', Material.LIGHT_BLUE_WOOL);
         recipe.setIngredient('W', Material.WHITE_WOOL);
