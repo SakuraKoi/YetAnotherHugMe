@@ -15,6 +15,11 @@ public enum HugAnimationEnum {
         public Identifier getAnimationPlayer2() {
             return Identifier.of(YetAnotherHugMe.MOD_ID, "hug_normal_receiver");
         }
+
+        @Override
+        public int getAnimationTicks() {
+            return 20 * 6;
+        }
     },
     TOUCHHEADHUG {
         @Override
@@ -26,8 +31,16 @@ public enum HugAnimationEnum {
         public Identifier getAnimationPlayer2() {
             return Identifier.of(YetAnotherHugMe.MOD_ID, "hug_touch_receiver");
         }
+
+        @Override
+        public int getAnimationTicks() {
+            return 20 * 6;
+        }
     };
 
     public abstract Identifier getAnimationPlayer1();
+
     public abstract Identifier getAnimationPlayer2();
+
+    public abstract int getAnimationTicks();
 }

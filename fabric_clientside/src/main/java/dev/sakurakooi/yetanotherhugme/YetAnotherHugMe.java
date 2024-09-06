@@ -62,6 +62,7 @@ public class YetAnotherHugMe implements ModInitializer {
 		}
 		// TODO unimplemented
 		// RenderPlayerEventHandler.lockPlayers(sender, receiver);
+		// TODO unlock after HugAnimationEnum.getAnimationTick
 		AnimationManager.playHugAnimation(player1, player2, animation);
 	}
 
