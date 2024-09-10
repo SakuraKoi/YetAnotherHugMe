@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class HugManager {
     private final HashMap<UUID, UUID> hugRequests = new HashMap<>();
@@ -56,6 +57,18 @@ public class HugManager {
         player1.setSneaking(false);
         player1.lookAt(player2.getEyeLocation(), LookAnchor.EYES);
 
-        // TODO start animation & send to nearby player
+        sendHugAnimation(player1, player2, hugAnimation);
+    }
+
+    private void sendHugAnimation(Player player1, Player player2, HugAnimationEnum hugAnimation) {
+        Stream.of(player1.getWorld().getNearbyEntitiesByType(Player.class, player1.getLocation(), 64).stream(),
+                        player2.getWorld().getNearbyEntitiesByType(Player.class, player2.getLocation(), 64).stream(),
+                        Stream.of(player1, player2))
+                .flatMap(a -> a)
+                .distinct()
+                .filter(o -> YetAnotherHugMe.getInstance().getModInstalledPlayers().contains(o.getUniqueId()))
+                .forEach(player -> {
+                    // TODO send animation packet
+                });
     }
 }
