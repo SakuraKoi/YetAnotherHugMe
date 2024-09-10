@@ -27,6 +27,9 @@ public final class YetAnotherHugMe extends JavaPlugin implements Listener {
     @Getter
     private final HashSet<UUID> modInstalledPlayers = new HashSet<>();
 
+    @Getter
+    private static final HugManager hugManager = new HugManager();
+
     @Override
     public void onEnable() {
         instance = this;
