@@ -2,6 +2,8 @@ package dev.sakurakooi.yetanotherhugme;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import dev.sakurakooi.yetanotherhugme.packet.S2CHugMeAnimationRenderPacket;
+import dev.sakurakooi.yetanotherhugme.utils.NettySerializerWrapper;
 import io.papermc.paper.entity.LookAnchor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,7 +43,11 @@ public class HugManager {
     }
 
     private void doAcceptHug(Player player1, Player player2, HugAnimationEnum hugAnimation) {
-        // TODO add player to table & start cleanup task
+        huggingPlayer.put(player1.getUniqueId(), player2.getUniqueId(), hugAnimation);
+        Bukkit.getScheduler().runTaskLater(YetAnotherHugMe.getInstance(), () -> {
+            huggingPlayer.remove(player1.getUniqueId(), player2.getUniqueId());
+        }, hugAnimation.getAnimationTicks());
+
         player2.lookAt(player1.getEyeLocation(), LookAnchor.EYES);
 
         @NotNull Vector senderLookVec = player2.getEyeLocation().getDirection();
@@ -61,14 +67,15 @@ public class HugManager {
     }
 
     private void sendHugAnimation(Player player1, Player player2, HugAnimationEnum hugAnimation) {
-        Stream.of(player1.getWorld().getNearbyEntitiesByType(Player.class, player1.getLocation(), 64).stream(),
-                        player2.getWorld().getNearbyEntitiesByType(Player.class, player2.getLocation(), 64).stream(),
+        Stream.of(player1.getWorld().getNearbyPlayers(player1.getLocation(), 64).stream(),
+                        player2.getWorld().getNearbyPlayers(player2.getLocation(), 64).stream(),
                         Stream.of(player1, player2))
                 .flatMap(a -> a)
                 .distinct()
                 .filter(o -> YetAnotherHugMe.getInstance().getModInstalledPlayers().contains(o.getUniqueId()))
                 .forEach(player -> {
-                    // TODO send animation packet
+                    player.sendPluginMessage(YetAnotherHugMe.getInstance(), S2CHugMeAnimationRenderPacket.ID,
+                            NettySerializerWrapper.writePacket(S2CHugMeAnimationRenderPacket.WRITER, new S2CHugMeAnimationRenderPacket(player1.getUniqueId(), player2.getUniqueId(), hugAnimation.name(), false)));
                 });
     }
 }

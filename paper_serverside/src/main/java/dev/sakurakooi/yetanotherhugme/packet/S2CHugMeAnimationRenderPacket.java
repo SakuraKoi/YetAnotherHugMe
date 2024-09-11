@@ -10,7 +10,7 @@ import java.util.function.Function;
 public record S2CHugMeAnimationRenderPacket(UUID player1, UUID player2, String hugType, boolean endFlag) {
     public static final String ID = "yetanotherhugme:animation";
 
-    public static final BiConsumer<ByteArrayDataOutput, S2CHugMeAnimationRenderPacket> writer = (buf, packet) -> {
+    public static final BiConsumer<ByteArrayDataOutput, S2CHugMeAnimationRenderPacket> WRITER = (buf, packet) -> {
         buf.writeUTF(packet.player1().toString());
         buf.writeUTF(packet.player2().toString());
         buf.writeUTF(packet.hugType());
