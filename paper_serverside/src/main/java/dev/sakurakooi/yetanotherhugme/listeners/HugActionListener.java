@@ -71,6 +71,7 @@ public class HugActionListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         // TODO check is mod installed
+        // TODO check is hugging -> check move outside block -> cancel hug
         // TODO check is any nearby player hugging and haven't sent animation -> send animation packet & add sent record
         // TODO check is any nearby hugging player out of range ->  remove sent record
     }
