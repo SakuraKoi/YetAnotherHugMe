@@ -70,8 +70,13 @@ public class HugActionListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        // TODO check is mod installed
-        // TODO check is hugging -> check move outside block -> cancel hug
+        if (!YetAnotherHugMe.getInstance().getModInstalledPlayers().contains(e.getPlayer().getUniqueId()))
+            return;
+        if (e.getFrom().getBlock().equals(e.getTo().getBlock()))
+            return;
+        if (YetAnotherHugMe.getHugManager().isHugging(e.getPlayer())) {
+            YetAnotherHugMe.getHugManager().cancelHug(e.getPlayer());
+        }
         // TODO check is any nearby player hugging and haven't sent animation -> send animation packet & add sent record
         // TODO check is any nearby hugging player out of range ->  remove sent record
     }
@@ -79,6 +84,10 @@ public class HugActionListener implements Listener {
     @EventHandler
     public void onLogout(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        // TODO
+        if (!YetAnotherHugMe.getInstance().getModInstalledPlayers().contains(e.getPlayer().getUniqueId()))
+            return;
+        if (YetAnotherHugMe.getHugManager().isHugging(e.getPlayer())) {
+            YetAnotherHugMe.getHugManager().cancelHug(e.getPlayer());
+        }
     }
 }

@@ -63,10 +63,10 @@ public class HugManager {
         player1.setSneaking(false);
         player1.lookAt(player2.getEyeLocation(), LookAnchor.EYES);
 
-        sendHugAnimation(player1, player2, hugAnimation);
+        sendHugAnimation(player1, player2, hugAnimation, true);
     }
 
-    private void sendHugAnimation(Player player1, Player player2, HugAnimationEnum hugAnimation) {
+    private void sendHugAnimation(Player player1, Player player2, HugAnimationEnum hugAnimation, boolean isHugging) {
         Stream.of(player1.getWorld().getNearbyPlayers(player1.getLocation(), 64).stream(),
                         player2.getWorld().getNearbyPlayers(player2.getLocation(), 64).stream(),
                         Stream.of(player1, player2))
@@ -75,7 +75,20 @@ public class HugManager {
                 .filter(o -> YetAnotherHugMe.getInstance().getModInstalledPlayers().contains(o.getUniqueId()))
                 .forEach(player -> {
                     player.sendPluginMessage(YetAnotherHugMe.getInstance(), S2CHugMeAnimationRenderPacket.ID,
-                            NettySerializerWrapper.writePacket(S2CHugMeAnimationRenderPacket.WRITER, new S2CHugMeAnimationRenderPacket(player1.getUniqueId(), player2.getUniqueId(), hugAnimation.name(), false)));
+                            NettySerializerWrapper.writePacket(S2CHugMeAnimationRenderPacket.WRITER, new S2CHugMeAnimationRenderPacket(player1.getUniqueId(), player2.getUniqueId(), hugAnimation.name(), !isHugging)));
                 });
+    }
+
+    public void cancelHug(Player player) {
+        Player player1, player2;
+        if (huggingPlayer.containsRow(player.getUniqueId())) {
+            player1 = player;
+            player2 = Bukkit.getPlayer(huggingPlayer.row(player.getUniqueId()).keySet().iterator().next());
+        } else {
+            player1 = Bukkit.getPlayer(huggingPlayer.column(player.getUniqueId()).keySet().iterator().next());
+            player2 = player;
+        }
+        huggingPlayer.remove(Objects.requireNonNull(player1).getUniqueId(), Objects.requireNonNull(player2).getUniqueId());
+        sendHugAnimation(player1, player2, HugAnimationEnum.values()[(int) (Math.random() * HugAnimationEnum.values().length)], false);
     }
 }
